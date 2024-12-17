@@ -11,11 +11,11 @@ To deploy your project to CodeRed, you'll need to take some steps through the Co
 
 ## Prerequisites
 
-Deployment to CodeRed requires three things:
+Deployment to CodeRed requires the following:
 
 - You must be using Git to track your project.
 - You need to be tracking your dependencies with a `requirements.txt` file, or be using Poetry or Pipenv.
-- The [CodeRed](https://www.codered.cloud/docs/cli/install/) must be installed on your system.
+- The [CodeRed CLI](https://www.codered.cloud/docs/cli/install/) must be installed on your system.
   - You'll also need a [CodeRed account](https://app.codered.cloud/login/), and an [API token](https://www.codered.cloud/docs/cli/quickstart/).
 
 ## Deployment
