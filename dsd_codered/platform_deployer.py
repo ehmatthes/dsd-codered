@@ -45,6 +45,7 @@ Add a set of requirements:
 
 import sys, os, re, json
 from pathlib import Path
+import shutil
 
 from django.utils.safestring import mark_safe
 
@@ -76,7 +77,8 @@ class PlatformDeployer:
         self._validate_platform()
         self._prep_automate_all()
 
-        # Configure project for deployment to CodeRed
+        # Configure project for deployment to CodeRed.
+        self._split_settings()
 
         self._conclude_automate_all()
         self._show_success_message()
@@ -97,6 +99,36 @@ class PlatformDeployer:
     def _prep_automate_all(self):
         """Take any further actions needed if using automate_all."""
         pass
+
+
+    def _split_settings(self):
+        """Split settings.py into base.py and prod.py.
+
+        CodeRed expects to find a settings/ dir, with at least a base.py and prod.py.
+        The user's original settings.py file becomes base.py, and prod.py contains
+        overrides.
+        """
+        # Add new settings dir, if it doesn't already exist.
+        path_settings_dir = sd_config.settings_path.parent / "settings"
+        if not path_settings_dir.exists():
+            plugin_utils.write_output(f"\nAdding new settings/ directory at {path_settings_dir}...")
+            plugin_utils.add_dir(path_settings_dir)
+
+        # Copy settings file to base.py.
+        path_settings_base = path_settings_dir / "base.py"
+        plugin_utils.write_output(f"  Copying settings.py to {path_settings_base}.")
+        shutil.copy(sd_config.settings_path, path_settings_base)
+
+        # Write prod settings. There's no custom data, so just copy the template file.
+        path_settings_prod = path_settings_dir / "prod.py"
+        plugin_utils.write_output(f"  Writing production settings to {path_settings_prod}.")
+        path_prod_template = self.templates_path / "settings_prod.py"
+        shutil.copy(path_prod_template, path_settings_prod)
+
+        # Remove original settings.py file.
+        plugin_utils.write_output(f"  Deleting original settings file: {sd_config.settings_path}")
+        sd_config.settings_path.unlink()
+        sd_config.settings_path = None
 
 
     def _conclude_automate_all(self):
