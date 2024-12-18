@@ -22,14 +22,14 @@ EMAIL_BACKEND = "django_sendmail_backend.backends.EmailBackend"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": "django.db.backends.postgresql",
         "HOST": os.environ["DB_HOST"],
         "NAME": os.environ["DB_NAME"],
         "USER": os.environ["DB_USER"],
         "PASSWORD": os.environ["DB_PASSWORD"],
         "OPTIONS": {
-            "ssl": {},
-            "charset": "utf8mb4",
+            "client_encoding": "UTF8",
+            "sslmode": "require",
         },
     }
 }
