@@ -79,6 +79,7 @@ class PlatformDeployer:
 
         # Configure project for deployment to CodeRed.
         self._split_settings()
+        self._modify_managepy()
 
         self._conclude_automate_all()
         self._show_success_message()
@@ -129,6 +130,26 @@ class PlatformDeployer:
         plugin_utils.write_output(f"  Deleting original settings file: {sd_config.settings_path}")
         sd_config.settings_path.unlink()
         sd_config.settings_path = None
+
+    def _modify_managepy(self):
+        """Update manage.py so it loads base settings, not prod.
+
+        If you only split settings.py into base.py and prod.py, local runserver no longer
+        works because it's using production settings.
+
+        Simple fix for now: explicitly load base settings for manage.py.
+        Note: If you make any manage.py calls on prod, you'll use local settings.
+          This may cause issues if CodeRed runs management commands, such as db commands.
+        """
+        plugin_utils.write_output("Modifying manage.py to use local settings...")
+        path_managepy = sd_config.project_root / "manage.py"
+        
+        # Simple way to make the change for now; consider a regex approach if this is
+        # a stable solution.
+        lines = path_managepy.read_text().splitlines()
+        new_lines = [line.replace('.settings")', '.settings.base")') for line in lines]
+        contents = "\n".join(new_lines)
+        path_managepy.write_text(contents)
 
 
     def _conclude_automate_all(self):
