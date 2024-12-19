@@ -8,8 +8,8 @@ Changelog: dsd-<platformname>
 
 #### External changes
 
-- 
+- Supports a proof of concept configuration-only deployment process, as outlined in the README.
 
 #### Internal changes
 
-- 
+- N/A
