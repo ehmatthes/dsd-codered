@@ -53,15 +53,16 @@ def success_msg(log_output=""):
         - Commit the changes made in the configuration process.
             $ git status
             $ git add .
-            $ git commit -am "Configured project for deployment."
-        - Push your project to CodeRed's servers:
-            $ ...
-        - Open your project:
-            $ ...    
+            $ git commit -am "Configured project for deployment to CodeRed."
+        - Set your API environment variable, and deploy your project to CodeRed's servers:
+            $ export CR_TOKEN=<api-token>
+            $ cr deploy <codered-app-name>
+        - The output will show you the URL where your project can be found. You can also
+          find that URL in your CodeRed admin interface.
         - As you develop your project further:
             - Make local changes
             - Commit your local changes
-            - Run `...` again to push your changes.
+            - Run `cr deploy <codered-app-name>` again to push your changes.
     """
     )
 
