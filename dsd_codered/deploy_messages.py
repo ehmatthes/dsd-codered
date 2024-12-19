@@ -38,6 +38,7 @@ You can log in from  the command line:
 # These need to be generated in functions, to display information that's determined as
 # the script runs.
 
+
 def success_msg(log_output=""):
     """Success message, for configuration-only run.
 

@@ -55,7 +55,9 @@ from . import deploy_messages as platform_msgs
 
 from simple_deploy.management.commands.utils import plugin_utils
 from simple_deploy.management.commands.utils.plugin_utils import sd_config
-from simple_deploy.management.commands.utils.command_errors import SimpleDeployCommandError
+from simple_deploy.management.commands.utils.command_errors import (
+    SimpleDeployCommandError,
+)
 
 
 class PlatformDeployer:
@@ -96,11 +98,9 @@ class PlatformDeployer:
         """
         pass
 
-
     def _prep_automate_all(self):
         """Take any further actions needed if using automate_all."""
         pass
-
 
     def _split_settings(self):
         """Split settings.py into base.py and prod.py.
@@ -112,7 +112,9 @@ class PlatformDeployer:
         # Add new settings dir, if it doesn't already exist.
         path_settings_dir = sd_config.settings_path.parent / "settings"
         if not path_settings_dir.exists():
-            plugin_utils.write_output(f"\nAdding new settings/ directory at {path_settings_dir}...")
+            plugin_utils.write_output(
+                f"\nAdding new settings/ directory at {path_settings_dir}..."
+            )
             plugin_utils.add_dir(path_settings_dir)
 
         # Copy settings file to base.py.
@@ -122,12 +124,16 @@ class PlatformDeployer:
 
         # Write prod settings. There's no custom data, so just copy the template file.
         path_settings_prod = path_settings_dir / "prod.py"
-        plugin_utils.write_output(f"  Writing production settings to {path_settings_prod}.")
+        plugin_utils.write_output(
+            f"  Writing production settings to {path_settings_prod}."
+        )
         path_prod_template = self.templates_path / "settings_prod.py"
         shutil.copy(path_prod_template, path_settings_prod)
 
         # Remove original settings.py file.
-        plugin_utils.write_output(f"  Deleting original settings file: {sd_config.settings_path}")
+        plugin_utils.write_output(
+            f"  Deleting original settings file: {sd_config.settings_path}"
+        )
         sd_config.settings_path.unlink()
         sd_config.settings_path = None
 
@@ -142,7 +148,7 @@ class PlatformDeployer:
         """
         plugin_utils.write_output("Modifying manage.py to use local settings...")
         path_managepy = sd_config.project_root / "manage.py"
-        
+
         # A template would be nicer, but I believe this approach is more resilient to
         # changes in manage.py across Django versions.
         lines = path_managepy.read_text().splitlines()
@@ -152,14 +158,17 @@ class PlatformDeployer:
             if '.settings")' in line:
                 new_lines.append('    if "CR_USER_UID" in os.environ:')
                 new_lines.append(line.replace("os.environ", "    os.environ"))
-                new_lines.append('    else:')
-                new_lines.append(line.replace('.settings")', '.settings.base")').replace("os.environ", "    os.environ"))
+                new_lines.append("    else:")
+                new_lines.append(
+                    line.replace('.settings")', '.settings.base")').replace(
+                        "os.environ", "    os.environ"
+                    )
+                )
             else:
                 new_lines.append(line)
 
         contents = "\n".join(new_lines)
         path_managepy.write_text(contents)
-
 
     def _conclude_automate_all(self):
         """Finish automating the push to CodeRed.
