@@ -144,10 +144,22 @@ class PlatformDeployer:
         plugin_utils.write_output("Modifying manage.py to use local settings...")
         path_managepy = sd_config.project_root / "manage.py"
         
-        # Simple way to make the change for now; consider a regex approach if this is
-        # a stable solution.
+        # Simple way to make the change for now; consider a template if this is
+        # a stable solution. I believe this is more resilient to changes in manage.py
+        # across Django versions.
         lines = path_managepy.read_text().splitlines()
-        new_lines = [line.replace('.settings")', '.settings.base")') for line in lines]
+        # new_lines = [line.replace('.settings")', '.settings.base")') for line in lines]
+
+        new_lines = []
+        for line in lines:
+            if '.settings")' in line:
+                new_lines.append('    if "CR_USER_UID" in os.environ:')
+                new_lines.append(line.replace("os.environ", "    os.environ"))
+                new_lines.append('    else:')
+                new_lines.append(line.replace('.settings")', '.settings.base")').replace("os.environ", "    os.environ"))
+            else:
+                new_lines.append(line)
+
         contents = "\n".join(new_lines)
         path_managepy.write_text(contents)
 

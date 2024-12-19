@@ -15,10 +15,34 @@ Deployment to CodeRed requires the following:
 
 - You must be using Git to track your project.
 - You need to be tracking your dependencies with a `requirements.txt` file, or be using Poetry or Pipenv.
-- The [CodeRed CLI](https://www.codered.cloud/docs/cli/install/) must be installed on your system.
-  - You'll also need a [CodeRed account](https://app.codered.cloud/login/), and an [API token](https://www.codered.cloud/docs/cli/quickstart/).
+- You'll need a [CodeRed account](https://app.codered.cloud/login/), and an [API token](https://www.codered.cloud/docs/cli/quickstart/).
+- You need to create a Django project in the CodeRed admin interface:
+  - Choose Django, and set the database to Postgres.
 
-## Deployment
+## Configuration-only deployment
 
-- Create a Django project on CodeRed.
-  - Use the same name for the CodeRed project as you used when running `startproject`.
+First, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
+
+```sh
+$ pip install dsd-codered
+# Add "simple_deploy" to INSTALLED_APPS in settings.py.
+$ git commit -am "Added simple_deploy to INSTALLED_APPS."
+```
+
+Now run the `deploy` command:
+
+```sh
+$ python manage.py deploy
+```
+
+At this point, you should review the changes that were made to your project. Running `git status` will show you which files were modified, and which files were created for a successful deployment. If you want to continue with the deployment process, commit these changes and run the `cr deploy` command; the initial migration is done automatically.
+
+```sh
+$ git add .
+$ git commit -m "Configured for deployment to CodeRed."
+$ cr deploy <codered-app-name>
+```
+
+Here, `<codered-app-name>` is the name you chose when you created a new project in the CodeRed admin interface. The last line of output will show you the URL for your deployed project. You can also find this URL in your CodeRed admin interace.
+
+You can find a record of the deployment process in `simple_deploy_logs`. It contains most of the output you saw when running `deploy`.
