@@ -103,11 +103,11 @@ class PlatformDeployer:
 
         - Get project name user chose when creating a project in CodeRed admin panel.
         """
-        prompt = "\nWhat is the name of the project you created in the CodeRed admin panel?"
-        log_info(prompt)
+        prompt = "\nWhat is the name of the project you created in the CodeRed admin panel? "
+        plugin_utils.log_info(prompt)
 
         self.cr_project_name = input(prompt).strip()
-        log_info(self.cr_project_name)
+        plugin_utils.log_info(self.cr_project_name)
 
     def _split_settings(self):
         """Split settings.py into base.py and prod.py.
