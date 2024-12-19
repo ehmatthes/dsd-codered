@@ -137,18 +137,15 @@ class PlatformDeployer:
         If you only split settings.py into base.py and prod.py, local runserver no longer
         works because it's using production settings.
 
-        Simple fix for now: explicitly load base settings for manage.py.
-        Note: If you make any manage.py calls on prod, you'll use local settings.
-          This may cause issues if CodeRed runs management commands, such as db commands.
+        CodeRed seems to consistently set a CR_USER_UID env var. Make production settings
+        dependent on this env var.
         """
         plugin_utils.write_output("Modifying manage.py to use local settings...")
         path_managepy = sd_config.project_root / "manage.py"
         
-        # Simple way to make the change for now; consider a template if this is
-        # a stable solution. I believe this is more resilient to changes in manage.py
-        # across Django versions.
+        # A template would be nicer, but I believe this approach is more resilient to
+        # changes in manage.py across Django versions.
         lines = path_managepy.read_text().splitlines()
-        # new_lines = [line.replace('.settings")', '.settings.base")') for line in lines]
 
         new_lines = []
         for line in lines:
