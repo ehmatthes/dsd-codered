@@ -46,6 +46,7 @@ Add a set of requirements:
 import sys, os, re, json, time
 from pathlib import Path
 import shutil
+import platform
 
 from django.utils.safestring import mark_safe
 

@@ -31,7 +31,7 @@ def get_cr_project_status(cr_project_name, raw=False):
 def get_deployed_project_url(cr_project_name):
     """Get the URL of the deployed project."""
     status_dict = get_cr_project_status(cr_project_name)
-    return status["primary_url"]
+    return status_dict["primary_url"]
 
 def validate_project_name(cr_project_name):
     """Make sure provided cr project name is valid.
@@ -45,7 +45,7 @@ def validate_project_name(cr_project_name):
         get_cr_project_status(cr_project_name, raw=True)
     except Exception:
         msg = f"The project {cr_project_name} does not seem to be a valid project name."
-        msg += "\nIf this is a typo, please run the deploy command again."
+        msg += "\n\nIf this is a typo, please run the deploy command again."
         msg += "\nIf you haven't created a project in the CodeRed admin panel yet, please"
-        msg += "\ndo that and then run deploy again."
+        msg += "\n  do that and then run deploy again."
         raise SimpleDeployCommandError(msg)
