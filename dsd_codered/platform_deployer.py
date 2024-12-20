@@ -200,6 +200,11 @@ class PlatformDeployer:
         # Get URL of deployed project.
         self.deployed_url = cr_utils.get_deployed_project_url(self.cr_project_name)
 
+        # Try to open the project in a new browser window.
+        if platform.system() == "Darwin":
+            cmd = f"open {self.deployed_url}"
+            plugin_utils.run_quick_command(cmd)
+
     def _show_success_message(self):
         """After a successful run, show a message about what to do next.
 

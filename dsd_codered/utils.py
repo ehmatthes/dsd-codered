@@ -39,12 +39,11 @@ def validate_project_name(cr_project_name):
     Returns:
     - None: if project name is valid.
     Raises:
-    - SimpleDeployCommandErro: if project name is invalid.
+    - SimpleDeployCommandError: if project name is invalid.
     """
     try:
-    status = get_cr_project_status(cr_project_name, raw=True)
-
-    if status[0] != 200:
+        get_cr_project_status(cr_project_name, raw=True)
+    except Exception:
         msg = f"The project {cr_project_name} does not seem to be a valid project name."
         msg += "\nIf this is a typo, please run the deploy command again."
         msg += "\nIf you haven't created a project in the CodeRed admin panel yet, please"

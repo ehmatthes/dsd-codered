@@ -84,7 +84,8 @@ def success_msg_automate_all(deployed_url, cr_project_name):
 
         --- Your project should now be deployed on CodeRed ---
 
-        - You can visit your project at {deployed_url}
+        - If your project didn't already open in a new browser tab,
+          you can visit it at {deployed_url}
 
         If you make further changes and want to push them to CodeRed,
         commit your changes and run `cr deploy {cr_project_name}`.
