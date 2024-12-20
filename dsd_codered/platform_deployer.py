@@ -59,6 +59,8 @@ from simple_deploy.management.commands.utils.command_errors import (
     SimpleDeployCommandError,
 )
 
+from . import utils as cr_utils
+
 
 class PlatformDeployer:
     """Perform the initial deployment to CodeRed
@@ -105,8 +107,9 @@ class PlatformDeployer:
         """
         prompt = "\nWhat is the name of the project you created in the CodeRed admin panel? "
         plugin_utils.log_info(prompt)
-
         self.cr_project_name = input(prompt).strip()
+
+        cr_utils.validate_project_name(self.cr_project_name)
         plugin_utils.log_info(self.cr_project_name)
 
     def _split_settings(self):
@@ -194,16 +197,8 @@ class PlatformDeployer:
         cmd = f"cr deploy {self.cr_project_name}"
         plugin_utils.run_slow_command(cmd)
 
-        # Deployed platform name should be in the log. Make sure log has been written before reading.
-        time.sleep(3)
-        log_contents = plugin_utils.read_log()
-        re_deployed_url = r'Your site is live at: (https://.*codered.cloud/)'
-        m = re.search(re_deployed_url, log_contents)
-        if m:
-            self.deployed_url = m.group(1).strip()
-        else:
-            self.deployed_url = "(Couldn't identify URL; check the log output or console)"
-        
+        # Get URL of deployed project.
+        self.deployed_url = cr_utils.get_deployed_project_url(self.cr_project_name)
 
     def _show_success_message(self):
         """After a successful run, show a message about what to do next.
