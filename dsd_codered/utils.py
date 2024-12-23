@@ -17,6 +17,7 @@ def get_cr_project_status(cr_project_name, raw=False):
 
     Returns:
         Dict: JSON dict representing project.
+        Tuple: If raw=True, return tuple including status and project info dict.
     """
     url = f"/api/webapps/{cr_project_name}/"
     cr_token = os.environ.get("CR_TOKEN")
