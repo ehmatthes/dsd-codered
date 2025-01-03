@@ -20,18 +20,24 @@ from tests.integration_tests.conftest import (
 
 # --- Test modifications to project files. ---
 
-
 def test_settings(tmp_project):
-    """Verify there's a CodeRed-specific settings section.
+    """Verify that settings.py is split into settings/base.py and settings/prod.py.
     This function only checks the entire settings file. It does not examine
       individual settings.
-
-    Note: This will fail as soon as you make updates to the user's settings file.
-    That's good! Look in the test's temp dir, look at the settings file after it was
-    modified, and if it's correct, copy that file to reference_files. Tests should pass
-    again.
     """
-    hf.check_reference_file(tmp_project, "blog/settings.py", "dsd-codered")
+    hf.check_reference_file(
+        tmp_project,
+        "blog/settings/base.py",
+        "dsd-codered",
+        reference_filename="settings_base.py",
+    )
+
+    hf.check_reference_file(
+        tmp_project,
+        "blog/settings/prod.py",
+        "dsd-codered",
+        reference_filename="settings_prod.py",
+    )
 
 
 def test_requirements_txt(tmp_project, pkg_manager):
