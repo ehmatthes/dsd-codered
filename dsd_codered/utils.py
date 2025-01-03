@@ -7,6 +7,7 @@ from cr import api
 from simple_deploy.management.commands.utils.command_errors import (
     SimpleDeployCommandError,
 )
+from simple_deploy.management.commands.utils.plugin_utils import sd_config
 
 
 def get_cr_project_status(cr_project_name, raw=False):
@@ -42,9 +43,18 @@ def validate_project_name(cr_project_name):
     Raises:
     - SimpleDeployCommandError: if project name is invalid.
     """
+    if sd_config.unit_testing:
+        return
+
     try:
         get_cr_project_status(cr_project_name, raw=True)
-    except Exception:
+    except Exception as e:
+        # The API raises a simple Exception with a custom message; don't catch other
+        # more general exceptions.
+        # DEV: Probably want to move this check to `get_cr_project_status()`.
+        if str(e) != "Invalid token.":
+            raise
+
         msg = f"The project {cr_project_name} does not seem to be a valid project name."
         msg += "\n\nIf this is a typo, please run the deploy command again."
         msg += "\nIf you haven't created a project in the CodeRed admin panel yet, please"
