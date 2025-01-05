@@ -73,6 +73,14 @@ def test_gitignore(tmp_project):
     hf.check_reference_file(tmp_project, ".gitignore", "dsd-codered")
 
 
+def test_managepy(tmp_project):
+    """Test that manage.py is modified correctly.
+
+    It should load base settings for local usage.
+    """
+    hf.check_reference_file(tmp_project, "manage.py", "dsd-codered")
+
+
 # --- Test CodeRed-specific files ---
 
 # Example test for a platform-specicific file such as Fly's Dockerfile
