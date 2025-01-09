@@ -52,11 +52,15 @@ def validate_project_name(cr_project_name):
         # The API raises a simple Exception with a custom message; don't catch other
         # more general exceptions.
         # DEV: Probably want to move this check to `get_cr_project_status()`.
-        if str(e) != "Invalid token.":
-            raise
+        if str(e) == "Invalid token.":
+            msg = "Missing or invalid token for the CodeRed API. Please run the following command:"
+            msg += "\n  $ export CR_TOKEN=<api-token>"
+            msg += "\nReplace <api-token> with the value of your CodeRed API token."
+            msg += "\nAfter exporting your API token, try running deploy again."
+        else:
+            msg = f'The project "{cr_project_name}" does not seem to be a valid project name.'
+            msg += "\n\nIf this is a typo, please run the deploy command again."
+            msg += "\nIf you haven't created a project in the CodeRed admin panel yet, please"
+            msg += "\n  do that and then run deploy again."
 
-        msg = f"The project {cr_project_name} does not seem to be a valid project name."
-        msg += "\n\nIf this is a typo, please run the deploy command again."
-        msg += "\nIf you haven't created a project in the CodeRed admin panel yet, please"
-        msg += "\n  do that and then run deploy again."
         raise SimpleDeployCommandError(msg)

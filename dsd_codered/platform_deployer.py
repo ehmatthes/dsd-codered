@@ -106,7 +106,10 @@ class PlatformDeployer:
 
         - Get project name user chose when creating a project in CodeRed admin panel.
         """
-        prompt = "\nWhat is the name of the project you created in the CodeRed admin panel? "
+        prompt = "\nIn order to deploy to CodeRed, you need to have an existing site on CodeRed."
+        prompt += "\n  If you haven't already done so, go to your CodeRed dashboard and create a site now."
+        prompt += "\n\n  What's the name of the website project you created in the CodeRed dashboard? "
+
         if not sd_config.unit_testing:
             self.cr_project_name = plugin_utils.get_user_info(prompt)
         else:
