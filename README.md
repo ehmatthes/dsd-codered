@@ -19,10 +19,10 @@ Deployment to CodeRed requires the following:
 
 ## Configuration-only deployment
 
-First, install `dsd-codered` and CodeRed's `cr` CLI, and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
+First, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
 
 ```sh
-$ pip install dsd-codered cr
+$ pip install dsd-codered
 # Add "simple_deploy" to INSTALLED_APPS in settings.py.
 $ git commit -am "Added simple_deploy to INSTALLED_APPS."
 ```
@@ -52,19 +52,20 @@ You can find a record of the deployment process in `simple_deploy_logs`. It cont
 
 ## Automated deployment
 
-You can automate most of this process, except the part where you create a  website in the CodeRed dashboard.
+You can automate most of this process:
 
 - Create a Django project in the CodeRed admin interface. Choose Django, and set the database to Postgres.
 - Next, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
 
 ```sh
-$ pip install dsd-codered cr
+$ pip install dsd-codered
 # Add "simple_deploy" to INSTALLED_APPS in settings.py.
 ```
 
-Now, run `deploy` in the fully automated mode:
+Now, set an environment variable with your CodeRed API token and run `deploy` in the fully automated mode:
 
 ```sh
+$ export CR_TOKEN=<api-token>
 $ python manage.py deploy --automate-all
 ```
 
