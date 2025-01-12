@@ -13,7 +13,7 @@ Changelog: dsd-<platformname>
 
 #### Internal changes
 
-- Requires `cr`; not need to install this separately.
+- Requires `cr`; no need to install this separately.
 - Tests for settings and changes to manage.py.
 
 0.1 - Provisional support for deployments
