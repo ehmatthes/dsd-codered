@@ -27,7 +27,7 @@ $ pip install dsd-codered
 $ git commit -am "Added simple_deploy to INSTALLED_APPS."
 ```
 
-When you install `dsd-codered`, it will install `django-simple-deploy` as a dependency. `cr` is CodeRed's [CLI tool](https://www.codered.cloud/docs/cli/); if you already have it installed system-wide, you don't need to install it to your project.
+When you install `dsd-codered`, it will install `django-simple-deploy` as a dependency.
 
 Now run the `deploy` command:
 
