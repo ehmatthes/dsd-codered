@@ -70,3 +70,8 @@ $ python manage.py deploy --automate-all
 ```
 
 You'll be prompted for the name of the project you created in the CodeRed dashboard. Your project will then be configured, all changes will be committed, and your project will be deployed to CodeRed's servers. When everything's complete, your project should open in a new browser tab.
+
+Deleting a project from CodeRed
+---
+
+If you want to delete a project from CodeRed, you can do so in their dashboard. Look at the bottom of the Settings page.
