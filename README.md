@@ -22,7 +22,7 @@ Deployment to CodeRed requires the following:
 First, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
 
 ```sh
-$ pip install dsd-codered cr
+$ pip install dsd-codered
 # Add "simple_deploy" to INSTALLED_APPS in settings.py.
 $ git commit -am "Added simple_deploy to INSTALLED_APPS."
 ```
@@ -49,3 +49,24 @@ $ cr deploy <codered-app-name>
 Here, `<codered-app-name>` is the name you chose when you created a new project in the CodeRed admin interface. The last line of output will show you the URL for your deployed project. You can also find this URL in your CodeRed admin interace.
 
 You can find a record of the deployment process in `simple_deploy_logs`. It contains most of the output you saw when running `deploy`.
+
+## Automated deployment
+
+You can automate most of this process:
+
+- Create a Django project in the CodeRed admin interface. Choose Django, and set the database to Postgres.
+- Next, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
+
+```sh
+$ pip install dsd-codered
+# Add "simple_deploy" to INSTALLED_APPS in settings.py.
+```
+
+Now, set an environment variable with your CodeRed API token and run `deploy` in the fully automated mode:
+
+```sh
+$ export CR_TOKEN=<api-token>
+$ python manage.py deploy --automate-all
+```
+
+You'll be prompted for the name of the project you created in the CodeRed dashboard. Your project will then be configured, all changes will be committed, and your project will be deployed to CodeRed's servers. When everything's complete, your project should open in a new browser tab.

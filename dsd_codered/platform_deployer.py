@@ -43,9 +43,10 @@ Add a set of requirements:
         plugin_utils.add_packages(requirements)
 """
 
-import sys, os, re, json
+import sys, os, re, json, time
 from pathlib import Path
 import shutil
+import platform
 
 from django.utils.safestring import mark_safe
 
@@ -58,6 +59,8 @@ from simple_deploy.management.commands.utils.plugin_utils import sd_config
 from simple_deploy.management.commands.utils.command_errors import (
     SimpleDeployCommandError,
 )
+
+from . import utils as cr_utils
 
 
 class PlatformDeployer:
@@ -99,8 +102,20 @@ class PlatformDeployer:
         pass
 
     def _prep_automate_all(self):
-        """Take any further actions needed if using automate_all."""
-        pass
+        """Take any further actions needed if using automate_all.
+
+        - Get project name user chose when creating a project in CodeRed admin panel.
+        """
+        prompt = "\nIn order to deploy to CodeRed, you need to have an existing site on CodeRed."
+        prompt += "\n  If you haven't already done so, go to your CodeRed dashboard and create a site now."
+        prompt += "\n\n  What's the name of the website project you created in the CodeRed dashboard? "
+
+        if not sd_config.unit_testing:
+            self.cr_project_name = plugin_utils.get_user_info(prompt)
+        else:
+            self.cr_project_name = "blog"
+
+        cr_utils.validate_project_name(self.cr_project_name)
 
     def _split_settings(self):
         """Split settings.py into base.py and prod.py.
@@ -184,9 +199,16 @@ class PlatformDeployer:
 
         # Push project.
         plugin_utils.write_output("  Deploying to CodeRed...")
+        cmd = f"cr deploy {self.cr_project_name}"
+        plugin_utils.run_slow_command(cmd)
 
-        # Should set self.deployed_url, which will be reported in the success message.
-        pass
+        # Get URL of deployed project.
+        self.deployed_url = cr_utils.get_deployed_project_url(self.cr_project_name)
+
+        # Try to open the project in a new browser window.
+        if platform.system() == "Darwin":
+            cmd = f"open {self.deployed_url}"
+            plugin_utils.run_quick_command(cmd)
 
     def _show_success_message(self):
         """After a successful run, show a message about what to do next.
@@ -194,7 +216,7 @@ class PlatformDeployer:
         Describe ongoing approach of commit, push, migrate.
         """
         if sd_config.automate_all:
-            msg = platform_msgs.success_msg_automate_all(self.deployed_url)
+            msg = platform_msgs.success_msg_automate_all(self.deployed_url, self.cr_project_name)
         else:
             msg = platform_msgs.success_msg(log_output=sd_config.log_output)
         plugin_utils.write_output(msg)

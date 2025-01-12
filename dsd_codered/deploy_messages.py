@@ -9,10 +9,9 @@ from django.conf import settings
 
 confirm_automate_all = """
 The --automate-all flag means simple_deploy will:
-- ...
+- Configure your project for deployment to CodeRed.
 - Commit all changes to your project that are necessary for deployment.
 - Push these changes to CodeRed.
-- Open your deployed project in a new browser tab.
 """
 
 cancel_codered = """
@@ -77,7 +76,7 @@ def success_msg(log_output=""):
     return msg
 
 
-def success_msg_automate_all(deployed_url):
+def success_msg_automate_all(deployed_url, cr_project_name):
     """Success message, when using --automate-all."""
 
     msg = dedent(
@@ -85,14 +84,11 @@ def success_msg_automate_all(deployed_url):
 
         --- Your project should now be deployed on CodeRed ---
 
-        It should have opened up in a new browser tab. If you see a
-          "server not available" message, wait a minute or two and
-          refresh the tab. It sometimes takes a few minutes for the
-          server to be ready.
-        - You can also visit your project at {deployed_url}
+        - If your project didn't already open in a new browser tab,
+          you can visit it at {deployed_url}
 
         If you make further changes and want to push them to CodeRed,
-        commit your changes and then run `...`.
+        commit your changes and run `cr deploy {cr_project_name}`.
     """
     )
     return msg
