@@ -4,10 +4,10 @@ import os
 
 from cr import api
 
-from simple_deploy.management.commands.utils.command_errors import (
+from django_simple_deploy.management.commands.utils.command_errors import (
     SimpleDeployCommandError,
 )
-from simple_deploy.management.commands.utils.plugin_utils import sd_config
+from django_simple_deploy.management.commands.utils.plugin_utils import sd_config
 
 
 def get_cr_project_status(cr_project_name, raw=False):

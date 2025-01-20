@@ -54,9 +54,9 @@ import requests
 
 from . import deploy_messages as platform_msgs
 
-from simple_deploy.management.commands.utils import plugin_utils
-from simple_deploy.management.commands.utils.plugin_utils import sd_config
-from simple_deploy.management.commands.utils.command_errors import (
+from django_simple_deploy.management.commands.utils import plugin_utils
+from django_simple_deploy.management.commands.utils.plugin_utils import sd_config
+from django_simple_deploy.management.commands.utils.command_errors import (
     SimpleDeployCommandError,
 )
 
