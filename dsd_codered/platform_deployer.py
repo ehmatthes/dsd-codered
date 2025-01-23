@@ -57,7 +57,7 @@ from . import deploy_messages as platform_msgs
 from django_simple_deploy.management.commands.utils import plugin_utils
 from django_simple_deploy.management.commands.utils.plugin_utils import sd_config
 from django_simple_deploy.management.commands.utils.command_errors import (
-    SimpleDeployCommandError,
+    DSDCommandError,
 )
 
 from . import utils as cr_utils
@@ -97,7 +97,7 @@ class PlatformDeployer:
         Returns:
             None
         Raises:
-            SimpleDeployCommandError: If we find any reason deployment won't work.
+            DSDCommandError: If we find any reason deployment won't work.
         """
         pass
 
