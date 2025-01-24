@@ -7,7 +7,7 @@ from cr import api
 from django_simple_deploy.management.commands.utils.command_errors import (
     DSDCommandError,
 )
-from django_simple_deploy.management.commands.utils.plugin_utils import sd_config
+from django_simple_deploy.management.commands.utils.plugin_utils import dsd_config
 
 
 def get_cr_project_status(cr_project_name, raw=False):
@@ -43,7 +43,7 @@ def validate_project_name(cr_project_name):
     Raises:
     - DSDCommandError: if project name is invalid.
     """
-    if sd_config.unit_testing:
+    if dsd_config.unit_testing:
         return
 
     try:
