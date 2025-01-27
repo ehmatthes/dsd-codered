@@ -4,6 +4,16 @@ Changelog: dsd-<platformname>
 0.2 - Support for `--automate-all`
 ---
 
+### 0.2.1
+
+#### External changes
+
+- Updated to match core app name change from `simple_deploy` to `django-simple-deploy`.
+
+#### Internal changes
+
+- Minor naming changes to make project consistent with current names in core.
+
 ### 0.2.0
 
 #### External changes
