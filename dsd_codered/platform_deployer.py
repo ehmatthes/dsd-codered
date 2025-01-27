@@ -7,7 +7,7 @@ Add a new file to the user's project, without using a template:
 
     def _add_dockerignore(self):
         # Add a dockerignore file, based on user's local project environmnet.
-        path = sd_config.project_root / ".dockerignore"
+        path = dsd_config.project_root / ".dockerignore"
         dockerignore_str = self._build_dockerignore()
         plugin_utils.add_file(path, dockerignore_str)
 
@@ -17,12 +17,12 @@ Add a new file to the user's project, using a template:
         # Add a minimal dockerfile.
         template_path = self.templates_path / "dockerfile_example"
         context = {
-            "django_project_name": sd_config.local_project_name,
+            "django_project_name": dsd_config.local_project_name,
         }
         contents = plugin_utils.get_template_string(template_path, context)
 
         # Write file to project.
-        path = sd_config.project_root / "Dockerfile"
+        path = dsd_config.project_root / "Dockerfile"
         plugin_utils.add_file(path, contents)
 
 Modify user's settings file:
@@ -54,10 +54,10 @@ import requests
 
 from . import deploy_messages as platform_msgs
 
-from simple_deploy.management.commands.utils import plugin_utils
-from simple_deploy.management.commands.utils.plugin_utils import sd_config
-from simple_deploy.management.commands.utils.command_errors import (
-    SimpleDeployCommandError,
+from django_simple_deploy.management.commands.utils import plugin_utils
+from django_simple_deploy.management.commands.utils.plugin_utils import dsd_config
+from django_simple_deploy.management.commands.utils.command_errors import (
+    DSDCommandError,
 )
 
 from . import utils as cr_utils
@@ -97,7 +97,7 @@ class PlatformDeployer:
         Returns:
             None
         Raises:
-            SimpleDeployCommandError: If we find any reason deployment won't work.
+            DSDCommandError: If we find any reason deployment won't work.
         """
         pass
 
@@ -110,7 +110,7 @@ class PlatformDeployer:
         prompt += "\n  If you haven't already done so, go to your CodeRed dashboard and create a site now."
         prompt += "\n\n  What's the name of the website project you created in the CodeRed dashboard? "
 
-        if not sd_config.unit_testing:
+        if not dsd_config.unit_testing:
             self.cr_project_name = plugin_utils.get_user_info(prompt)
         else:
             self.cr_project_name = "blog"
@@ -125,7 +125,7 @@ class PlatformDeployer:
         overrides.
         """
         # Add new settings dir, if it doesn't already exist.
-        path_settings_dir = sd_config.settings_path.parent / "settings"
+        path_settings_dir = dsd_config.settings_path.parent / "settings"
         if not path_settings_dir.exists():
             plugin_utils.write_output(
                 f"\nAdding new settings/ directory at {path_settings_dir}..."
@@ -135,7 +135,7 @@ class PlatformDeployer:
         # Copy settings file to base.py.
         path_settings_base = path_settings_dir / "base.py"
         plugin_utils.write_output(f"  Copying settings.py to {path_settings_base}.")
-        shutil.copy(sd_config.settings_path, path_settings_base)
+        shutil.copy(dsd_config.settings_path, path_settings_base)
 
         # Write prod settings. There's no custom data, so just copy the template file.
         path_settings_prod = path_settings_dir / "prod.py"
@@ -147,10 +147,10 @@ class PlatformDeployer:
 
         # Remove original settings.py file.
         plugin_utils.write_output(
-            f"  Deleting original settings file: {sd_config.settings_path}"
+            f"  Deleting original settings file: {dsd_config.settings_path}"
         )
-        sd_config.settings_path.unlink()
-        sd_config.settings_path = None
+        dsd_config.settings_path.unlink()
+        dsd_config.settings_path = None
 
     def _modify_managepy(self):
         """Update manage.py so it loads base settings, not prod.
@@ -162,7 +162,7 @@ class PlatformDeployer:
         dependent on this env var.
         """
         plugin_utils.write_output("Modifying manage.py to use local settings...")
-        path_managepy = sd_config.project_root / "manage.py"
+        path_managepy = dsd_config.project_root / "manage.py"
 
         # A template would be nicer, but I believe this approach is more resilient to
         # changes in manage.py across Django versions.
@@ -192,7 +192,7 @@ class PlatformDeployer:
         - ...
         """
         # Making this check here lets deploy() be cleaner.
-        if not sd_config.automate_all:
+        if not dsd_config.automate_all:
             return
 
         plugin_utils.commit_changes()
@@ -215,8 +215,8 @@ class PlatformDeployer:
 
         Describe ongoing approach of commit, push, migrate.
         """
-        if sd_config.automate_all:
+        if dsd_config.automate_all:
             msg = platform_msgs.success_msg_automate_all(self.deployed_url, self.cr_project_name)
         else:
-            msg = platform_msgs.success_msg(log_output=sd_config.log_output)
+            msg = platform_msgs.success_msg(log_output=dsd_config.log_output)
         plugin_utils.write_output(msg)

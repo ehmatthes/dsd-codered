@@ -4,10 +4,10 @@ import os
 
 from cr import api
 
-from simple_deploy.management.commands.utils.command_errors import (
-    SimpleDeployCommandError,
+from django_simple_deploy.management.commands.utils.command_errors import (
+    DSDCommandError,
 )
-from simple_deploy.management.commands.utils.plugin_utils import sd_config
+from django_simple_deploy.management.commands.utils.plugin_utils import dsd_config
 
 
 def get_cr_project_status(cr_project_name, raw=False):
@@ -41,9 +41,9 @@ def validate_project_name(cr_project_name):
     Returns:
     - None: if project name is valid.
     Raises:
-    - SimpleDeployCommandError: if project name is invalid.
+    - DSDCommandError: if project name is invalid.
     """
-    if sd_config.unit_testing:
+    if dsd_config.unit_testing:
         return
 
     try:
@@ -63,4 +63,4 @@ def validate_project_name(cr_project_name):
             msg += "\nIf you haven't created a project in the CodeRed admin panel yet, please"
             msg += "\n  do that and then run deploy again."
 
-        raise SimpleDeployCommandError(msg)
+        raise DSDCommandError(msg)
