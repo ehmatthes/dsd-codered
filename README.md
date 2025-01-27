@@ -19,12 +19,12 @@ Deployment to CodeRed requires the following:
 
 ## Configuration-only deployment
 
-First, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
+First, install `dsd-codered` and add `django_simple_deploy` to `INSTALLED_APPS` in *settings.py*:
 
 ```sh
 $ pip install dsd-codered
-# Add "simple_deploy" to INSTALLED_APPS in settings.py.
-$ git commit -am "Added simple_deploy to INSTALLED_APPS."
+# Add "django_simple_deploy" to INSTALLED_APPS in settings.py.
+$ git commit -am "Added django_simple_deploy to INSTALLED_APPS."
 ```
 
 When you install `dsd-codered`, it will install `django-simple-deploy` as a dependency.
@@ -48,18 +48,18 @@ $ cr deploy <codered-app-name>
 
 Here, `<codered-app-name>` is the name you chose when you created a new project in the CodeRed admin interface. The last line of output will show you the URL for your deployed project. You can also find this URL in your CodeRed admin interace.
 
-You can find a record of the deployment process in `simple_deploy_logs`. It contains most of the output you saw when running `deploy`.
+You can find a record of the deployment process in `dsd_logs/`. It contains most of the output you saw when running `deploy`.
 
 ## Automated deployment
 
 You can automate most of this process:
 
 - Create a Django project in the CodeRed admin interface. Choose Django, and set the database to Postgres.
-- Next, install `dsd-codered` and add `simple_deploy` to `INSTALLED_APPS` in *settings.py*:
+- Next, install `dsd-codered` and add `django_simple_deploy` to `INSTALLED_APPS` in *settings.py*:
 
 ```sh
 $ pip install dsd-codered
-# Add "simple_deploy" to INSTALLED_APPS in settings.py.
+# Add "django_simple_deploy" to INSTALLED_APPS in settings.py.
 ```
 
 Now, set an environment variable with your CodeRed API token and run `deploy` in the fully automated mode:
