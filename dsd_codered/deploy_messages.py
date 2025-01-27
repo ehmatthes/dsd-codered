@@ -8,7 +8,7 @@ from django.conf import settings
 
 
 confirm_automate_all = """
-The --automate-all flag means simple_deploy will:
+The --automate-all flag means the deploy command will:
 - Configure your project for deployment to CodeRed.
 - Commit all changes to your project that are necessary for deployment.
 - Push these changes to CodeRed.
