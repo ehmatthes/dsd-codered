@@ -12,6 +12,7 @@ from tests.integration_tests.conftest import (
     run_dsd,
     reset_test_project,
     pkg_manager,
+    dsd_version,
 )
 
 
@@ -19,6 +20,7 @@ from tests.integration_tests.conftest import (
 
 
 # --- Test modifications to project files. ---
+
 
 def test_settings(tmp_project):
     """Verify that settings.py is split into settings/base.py and settings/prod.py.
@@ -40,32 +42,45 @@ def test_settings(tmp_project):
     )
 
 
-def test_requirements_txt(tmp_project, pkg_manager):
-    """Test that the requirements.txt file is correct.
-    Note: This will fail as soon as you add new requirements. That's good! Look in the
-    test's temp dir, look at the requirements.txt file after it was modified, and if
-    it's correct, copy it to reference files. Tests should pass again.
-    """
+def test_requirements_txt(tmp_project, pkg_manager, tmp_path, dsd_version):
+    """Test that the requirements.txt file is correct."""
     if pkg_manager == "req_txt":
-        hf.check_reference_file(tmp_project, "requirements.txt", "dsd-codered")
+        context = {"current-version": dsd_version}
+        hf.check_reference_file(
+            tmp_project,
+            "requirements.txt",
+            "dsd-codered",
+            context=context,
+            tmp_path=tmp_path,
+        )
     elif pkg_manager in ["poetry", "pipenv"]:
         assert not Path("requirements.txt").exists()
 
 
-def test_pyproject_toml(tmp_project, pkg_manager):
+def test_pyproject_toml(tmp_project, pkg_manager, tmp_path, dsd_version):
     """Test that pyproject.toml is correct."""
     if pkg_manager in ("req_txt", "pipenv"):
         assert not Path("pyproject.toml").exists()
     elif pkg_manager == "poetry":
-        hf.check_reference_file(tmp_project, "pyproject.toml", "dsd-codered")
+        context = {"current-version": dsd_version}
+        hf.check_reference_file(
+            tmp_project,
+            "pyproject.toml",
+            "dsd-codered",
+            context=context,
+            tmp_path=tmp_path,
+        )
 
 
-def test_pipfile(tmp_project, pkg_manager):
+def test_pipfile(tmp_project, pkg_manager, tmp_path, dsd_version):
     """Test that Pipfile is correct."""
     if pkg_manager in ("req_txt", "poetry"):
         assert not Path("Pipfile").exists()
     elif pkg_manager == "pipenv":
-        hf.check_reference_file(tmp_project, "Pipfile", "dsd-codered")
+        context = {"current-version": dsd_version}
+        hf.check_reference_file(
+            tmp_project, "Pipfile", "dsd-codered", context=context, tmp_path=tmp_path
+        )
 
 
 def test_gitignore(tmp_project):

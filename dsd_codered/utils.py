@@ -30,10 +30,12 @@ def get_cr_project_status(cr_project_name, raw=False):
     else:
         return response[1]
 
+
 def get_deployed_project_url(cr_project_name):
     """Get the URL of the deployed project."""
     status_dict = get_cr_project_status(cr_project_name)
     return status_dict["primary_url"]
+
 
 def validate_project_name(cr_project_name):
     """Make sure provided cr project name is valid.
