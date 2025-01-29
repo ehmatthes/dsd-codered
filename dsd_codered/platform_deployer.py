@@ -183,6 +183,8 @@ class PlatformDeployer:
                 new_lines.append(line)
 
         contents = "\n".join(new_lines)
+        # Add a newline at end of file.
+        contents += "\n"
         path_managepy.write_text(contents)
 
     def _conclude_automate_all(self):
